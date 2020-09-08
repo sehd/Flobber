@@ -1,3 +1,3 @@
-package com.sigmasharp.flobberapp.services.console
+package com.sigmasharp.flobberapp.services.logger
 
-class ConsoleItem(val Content:String,val Type:ConsoleItemType) {}
+class LogItem(val Content:String, val type:LogItemType) {}

@@ -1,6 +1,6 @@
-package com.sigmasharp.flobberapp.services.console
+package com.sigmasharp.flobberapp.services.logger
 
-enum class ConsoleItemType {
+enum class LogItemType {
     Normal,
     Warning,
     Error

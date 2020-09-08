@@ -1,7 +1,14 @@
 package com.sigmasharp.flobberapp.services.bluetooth
 
-class BlueToothImpl : BlueTooth {
-    override fun Send(message: String) {
+import com.sigmasharp.flobberapp.services.logger.Logger
+
+class BlueToothImpl(private val logger: Logger) : BlueTooth {
+    override fun start() {
         TODO("Not yet implemented")
     }
+
+    override fun send(message: String) {
+        logger.addWarning("Not sending $message")
+    }
+
 }

@@ -1,26 +1,32 @@
-package com.sigmasharp.flobberapp.services.console
+package com.sigmasharp.flobberapp.services.logger
 
-class MemoryConsoleService : ConsoleService {
-    private val items= arrayListOf<ConsoleItem>()
+class MemoryLogger : Logger {
+    private val items= arrayListOf<LogItem>()
+    private lateinit var callback:LogAddedCallback
 
-    override fun log(content:String,type:ConsoleItemType){
-        items.add(ConsoleItem(content,type))
+    override fun log(content:String,type:LogItemType){
+        val item=LogItem(content,type)
+        items.add(item)
+        callback.logAdded(item)
     }
 
     override fun addNormal(text: String) {
-        items.add(ConsoleItem(text,ConsoleItemType.Normal))
+        log(text,LogItemType.Normal)
     }
 
     override fun addWarning(text: String) {
-        items.add(ConsoleItem(text,ConsoleItemType.Warning))
+        log(text,LogItemType.Warning)
     }
 
     override fun addError(text: String) {
-        items.add(ConsoleItem(text,ConsoleItemType.Error))
-
+        log(text,LogItemType.Error)
     }
 
-    override fun getItems() :ArrayList<ConsoleItem>{
+    override fun getItems() :ArrayList<LogItem>{
         return items
+    }
+
+    override fun setLogAddedCallBack(callback: LogAddedCallback) {
+        this.callback=callback
     }
 }
