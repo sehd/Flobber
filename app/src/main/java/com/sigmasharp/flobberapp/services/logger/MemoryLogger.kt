@@ -1,21 +1,21 @@
 package com.sigmasharp.flobberapp.services.logger
 
 class MemoryLogger : Logger {
-    private val items= arrayListOf<LogItem>()
-    private lateinit var callback:LogAddedCallback
+    private val items = arrayListOf<LogItem>()
+    private lateinit var callback: LogAddedCallback
 
-    override fun log(content:String,type:LogItemType){
-        val item=LogItem(content,type)
+    override fun log(text: String, type: LogItemType) {
+        val item = LogItem(text, type)
         items.add(item)
-        callback.logAdded(item)
+        callback.logAdded(items.size - 1)
     }
 
     override fun addNormal(text: String) {
-        log(text,LogItemType.Normal)
+        log(text, LogItemType.Normal)
     }
 
     override fun addWarning(text: String) {
-        log(text,LogItemType.Warning)
+        log(text, LogItemType.Warning)
     }
 
     override fun addError(text: String) {
