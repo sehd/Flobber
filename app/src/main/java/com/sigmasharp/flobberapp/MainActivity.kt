@@ -1,11 +1,10 @@
 package com.sigmasharp.flobberapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sigmasharp.flobberapp.services.bluetooth.BlueTooth
 import com.sigmasharp.flobberapp.services.bluetooth.BlueToothImpl
-import com.sigmasharp.flobberapp.services.logger.LogAddedCallback
 import com.sigmasharp.flobberapp.services.logger.LogItemType
 import com.sigmasharp.flobberapp.services.logger.Logger
 import com.sigmasharp.flobberapp.services.logger.MemoryLogger
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         //Dependencies
         logger = MemoryLogger()
         messaging = SimpleMessaging(logger)
-        webServer = KtorWebServer(logger, messaging)
+        webServer = KtorWebServer(logger, messaging, application.assets)
         bluetooth = BlueToothImpl(logger)
         flobber = Flobber(logger, messaging, bluetooth)
 
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             logger.log("Booting...")
-            webServer.start(port)
+            webServer.start(port, applicationContext)
             bluetooth.start()
             flobber.start()
             logger.log("Application Initialized")
@@ -58,7 +57,9 @@ class MainActivity : AppCompatActivity() {
         consoleAdapter = ConsoleAdapter(logger.getItems())
         rvConsole.adapter = consoleAdapter
         logger.setLogAddedCallBack {
-            consoleAdapter.notifyItemInserted(logger.getItems().size - 1)
+            this@MainActivity.runOnUiThread {
+                consoleAdapter.notifyItemInserted(logger.getItems().size - 1)
+            }
         }
     }
 }

@@ -7,6 +7,6 @@ interface BlueTooth {
     fun send(message: String)
 
     companion object {
-        val blueToothMessageReceived = MessageAddress("BlueTooth_blueToothMessageReceived")
+        val bluetoothMessageReceived = MessageAddress("BlueTooth_bluetoothMessageReceived")
     }
 }

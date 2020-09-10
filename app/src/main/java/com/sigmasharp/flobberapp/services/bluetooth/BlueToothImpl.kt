@@ -4,7 +4,7 @@ import com.sigmasharp.flobberapp.services.logger.Logger
 
 class BlueToothImpl(private val logger: Logger) : BlueTooth {
     override fun start() {
-        TODO("Not yet implemented")
+
     }
 
     override fun send(message: String) {
