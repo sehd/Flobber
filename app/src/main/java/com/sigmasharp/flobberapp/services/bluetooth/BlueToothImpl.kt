@@ -10,20 +10,29 @@ import java.io.OutputStream
 
 class BlueToothImpl(private val logger: Logger) : BlueTooth {
 
-    private lateinit var socket: BluetoothSocket
+    private var socket: BluetoothSocket? = null
     override fun start() {
-        val bluetoothAdapter = getDevice() ?: return
+        val bluetoothAdapter = getDevice()
+        if (bluetoothAdapter == null) {
+            logger.addError("No bluetooth adapter!")
+            return
+        }
         connect(bluetoothAdapter)
     }
 
     override fun send(message: String) {
         val outStream: OutputStream
         try {
-            outStream = socket.outputStream
+            if (socket == null) {
+                logger.addWarning("Sending command while connecting")
+            }
+            outStream =
+                socket?.outputStream ?: throw Exception("How did tou lost socket in this point?")
             val msgBuffer = message.toByteArray()
             outStream.write(msgBuffer)
         } catch (e: IOException) {
             logger.addError("Bluetooth connection lost:" + e.message)
+            start()
         } catch (ex: Exception) {
             logger.addError("Bluetooth send error: " + ex.message)
         }
@@ -54,16 +63,24 @@ class BlueToothImpl(private val logger: Logger) : BlueTooth {
         bluetoothAdapter.cancelDiscovery()
         try {
             socket = device.createRfcommSocketToServiceRecord(device.uuids[0].uuid)
-            socket.connect()
-            logger.addNormal("Bluetooth connected")
+            socket?.connect()
+            if (socket?.isConnected == true)
+                logger.addNormal("Bluetooth connected")
+            else {
+                logger.addWarning("Connection failed. Reconnecting")
+                Thread.sleep(5000)
+                connect(bluetoothAdapter)
+            }
         } catch (e: IOException) {
             try {
-                socket.close()
+                socket?.close()
             } catch (e2: IOException) {
                 logger.addError("Couldn't close connection")
             }
 
-            logger.addError("Bluetooth connection failed")
+            logger.addWarning("Connection failed. Reconnecting")
+            Thread.sleep(5000)
+            connect(bluetoothAdapter)
         } catch (ex: Exception) {
             logger.addError("Bluetooth failed: " + ex.message)
         }

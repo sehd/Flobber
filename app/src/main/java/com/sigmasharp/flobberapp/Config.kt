@@ -2,7 +2,7 @@ package com.sigmasharp.flobberapp
 
 interface Config {
     companion object {
-        val port = 8080
-        val btTargetDeviceName = "Flobber"
+        const val port = 8080
+        const val btTargetDeviceName = "Flobber"
     }
 }
