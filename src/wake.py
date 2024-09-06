@@ -1,37 +1,24 @@
 from keys import pico_voice_key
 import pvporcupine
-from pvrecorder import PvRecorder
-
-porcupine = pvporcupine.create(
-    access_key=f"{pico_voice_key()}",
-    keywords=["bumblebee"],
-)
 
 
-def get_next_audio_frame():
-    return recorder.read()
+class Wake:
+    def __enter__(self) -> None:
+        self.porcupine = pvporcupine.create(
+            access_key=f"{pico_voice_key()}",
+            keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
+        )
 
+    def get_device_frame_length(self):
+        return self.porcupine.frame_length
 
-def listen_until_woken():
-    while True:
-        audio_frame = get_next_audio_frame()
-        keyword_index = porcupine.process(audio_frame)
-        if keyword_index == 0:
-            print("Flubber!!!!")
-            porcupine.delete()
-            return
+    def listen_until_woken(self, recorder):
+        while True:
+            audio_frame = recorder.read()
+            keyword_index = self.porcupine.process(audio_frame)
+            if keyword_index == 0:
+                print("Flubber!!!!")
+                return
 
-
-# for i, device in enumerate(PvRecorder.get_available_devices()):
-#     print("Device %d: %s" % (i, device))
-recorder = PvRecorder(frame_length=porcupine.frame_length, device_index=0)
-recorder.start()
-
-print("Listening ... (press Ctrl+C to exit)")
-try:
-    listen_until_woken()
-except KeyboardInterrupt:
-    print("Stopping ...")
-finally:
-    recorder.delete()
-    porcupine.delete()
+    def __exit__(self):
+        self.porcupine.delete()
