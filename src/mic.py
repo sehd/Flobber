@@ -7,8 +7,14 @@ def get_mics():
 
 
 class Mic:
-    def __enter__(self, device_id, frame_length):
-        self.recorder = PvRecorder(frame_length=frame_length, device_index=device_id)
+    def __init__(self, device_id, frame_length):
+        self.device_id = device_id
+        self.frame_length = frame_length
+
+    def __enter__(self):
+        self.recorder = PvRecorder(
+            frame_length=self.frame_length, device_index=self.device_id
+        )
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
