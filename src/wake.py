@@ -6,6 +6,7 @@ class Wake:
     def __enter__(self):
         self.porcupine = pvporcupine.create(
             access_key=f"{pico_voice_key()}",
+            #keywords=["bumblebee"]
             keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
         )
         print("purcupine started")
@@ -18,7 +19,7 @@ class Wake:
         while True:
             audio_frame = recorder.read()
             keyword_index = self.porcupine.process(audio_frame)
-            if keyword_index != 0:
+            if keyword_index >= 0:
                 print(f"Heard keyword {keyword_index}")
                 return
 

@@ -18,15 +18,17 @@ if len(mics) == 0:
     print("No microphone found.")
     exit()
 
-print(f"Selected mic: {mics[0]}")
+print(f"Selected mic: {mics[1]}")
 with Wake() as wake:
     print(f"Starting wake. Frame length = {wake.get_device_frame_length()}")
-    with Mic(0, wake.get_device_frame_length()) as recorder:
+    with Mic(1, wake.get_device_frame_length()) as recorder:
         recorder.start_recorder()
 
         print("Recording test file... make some noise")
-        testRecordingPath = "testRecording.wav"
+        testRecordingPath = "output/testRecording.wav"
         recorder.record_test_file(testRecordingPath)
+        print("Playing back")
+
         from speak import play
 
         play(testRecordingPath)
