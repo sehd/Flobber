@@ -19,3 +19,6 @@ class Mic:
 
     def stop_recorder(self):
         self.recorder.stop()
+
+    def read(self):
+        self.recorder.read()
