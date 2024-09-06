@@ -23,6 +23,10 @@ print("Starting wake word service...")
 with Wake() as wake:
     with Mic(0, wake.get_device_frame_length()) as recorder:
         recorder.start_recorder()
+        testRecording = recorder.read()
+        if testRecording is None:
+            print("Recording failed")
+            exit()
         print("Listening ... (press Ctrl+C to exit)")
         try:
             wake.listen_until_woken(recorder)

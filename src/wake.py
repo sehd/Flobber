@@ -8,6 +8,7 @@ class Wake:
             access_key=f"{pico_voice_key()}",
             keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
         )
+        print("purcupine started")
         return self
 
     def get_device_frame_length(self):
