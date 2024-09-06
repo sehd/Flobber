@@ -13,7 +13,11 @@ import mic
 from wake import Wake
 
 mics = [x for x in mic.get_mics()]
-print("\n".join())
+print("\n".join(mics))
+if len(mics) == 0:
+    print("No microphone found.")
+    exit()
+
 print(f"Selected mic: {mics[0]}")
 print("Starting wake word service...")
 with Wake() as wake:

@@ -3,11 +3,12 @@ import pvporcupine
 
 
 class Wake:
-    def __enter__(self) -> None:
+    def __enter__(self):
         self.porcupine = pvporcupine.create(
             access_key=f"{pico_voice_key()}",
             keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
         )
+        return self
 
     def get_device_frame_length(self):
         return self.porcupine.frame_length
@@ -20,5 +21,5 @@ class Wake:
                 print("Flubber!!!!")
                 return
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.porcupine.delete()
