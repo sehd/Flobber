@@ -9,10 +9,10 @@ tts.say_offline("Starting up")
 
 print("Starting mic...")
 
-import mic
+from mic import Mic, get_mics
 from wake import Wake
 
-mics = [x for x in mic.get_mics()]
+mics = [x for x in get_mics()]
 print("\n".join(mics))
 if len(mics) == 0:
     print("No microphone found.")
@@ -21,7 +21,8 @@ if len(mics) == 0:
 print(f"Selected mic: {mics[0]}")
 print("Starting wake word service...")
 with Wake() as wake:
-    with mic.start_recorder(0, wake.get_device_frame_length()) as recorder:
+    with Mic(0, wake.get_device_frame_length()) as recorder:
+        recorder.start_recorder()
         print("Listening ... (press Ctrl+C to exit)")
         try:
             wake.listen_until_woken(recorder)
