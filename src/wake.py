@@ -18,8 +18,8 @@ class Wake:
         while True:
             audio_frame = recorder.read()
             keyword_index = self.porcupine.process(audio_frame)
-            if keyword_index == 0:
-                print("Flubber!!!!")
+            if keyword_index != 0:
+                print(f"Heard keyword {keyword_index}")
                 return
 
     def __exit__(self, exc_type, exc_val, exc_tb):

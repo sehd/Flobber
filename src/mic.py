@@ -1,4 +1,6 @@
 from pvrecorder import PvRecorder
+import wave
+import struct
 
 
 def get_mics():
@@ -25,6 +27,16 @@ class Mic:
 
     def stop_recorder(self):
         self.recorder.stop()
+
+    def record_test_file(self, path):
+        wav_file = wave.open(path, "w")
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2)
+        wav_file.setframerate(16000)
+        for _ in range(100):
+            pcm = self.recorder.read()
+            wav_file.writeframes(struct.pack("h" * len(pcm), *pcm))
+        wav_file.close()
 
     def read(self):
         return self.recorder.read()

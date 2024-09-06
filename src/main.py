@@ -19,14 +19,15 @@ if len(mics) == 0:
     exit()
 
 print(f"Selected mic: {mics[0]}")
-print("Starting wake word service...")
 with Wake() as wake:
+    print(f"Starting wake. Frame length = {wake.get_device_frame_length()}")
     with Mic(0, wake.get_device_frame_length()) as recorder:
         recorder.start_recorder()
-        testRecording = recorder.read()
-        if testRecording is None:
-            print("Recording failed")
-            exit()
+
+        print("Recording test file... make some noise")
+        recorder.record_test_file("testRecording.wav")
+        print("Test recording saved in testRecording.wav")
+
         print("Listening ... (press Ctrl+C to exit)")
         try:
             wake.listen_until_woken(recorder)
