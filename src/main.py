@@ -25,8 +25,12 @@ with Wake() as wake:
         recorder.start_recorder()
 
         print("Recording test file... make some noise")
-        recorder.record_test_file("testRecording.wav")
-        print("Test recording saved in testRecording.wav")
+        testRecordingPath = "testRecording.wav"
+        recorder.record_test_file(testRecordingPath)
+        from speak import play
+
+        play(testRecordingPath)
+        print(f"Test recording saved in {testRecordingPath}")
 
         print("Listening ... (press Ctrl+C to exit)")
         try:
