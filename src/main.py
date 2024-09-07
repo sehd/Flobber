@@ -1,42 +1,15 @@
-print("Starting up...")
+from stt import transcribe_audio
+from speak import play
+from bootstrap import bootstrap
 
 
-print("Testing tts...")
+def start_main_loop(recorder, wake):
+    while True:
+        wake.listen_until_woken(recorder)
+        play("assets/predefined_sounds/yes.mp3")
+        command_path = "output/command.wav"
+        recorder.record_until_silence(command_path)
+        command = transcribe_audio(command_path)
 
-import tts
 
-tts.say_offline("Starting up")
-
-print("Starting mic...")
-
-from mic import Mic, get_mics
-from wake import Wake
-
-mics = [x for x in get_mics()]
-print("\n".join(mics))
-if len(mics) == 0:
-    print("No microphone found.")
-    exit()
-
-print(f"Selected mic: {mics[1]}")
-with Wake() as wake:
-    print(f"Starting wake. Frame length = {wake.get_device_frame_length()}")
-    with Mic(1, wake.get_device_frame_length()) as recorder:
-        recorder.start_recorder()
-
-        print("Recording test file... make some noise")
-        testRecordingPath = "output/testRecording.wav"
-        recorder.record_test_file(testRecordingPath)
-        print("Playing back")
-
-        from speak import play
-
-        play(testRecordingPath)
-        print(f"Test recording saved in {testRecordingPath}")
-
-        print("Listening ... (press Ctrl+C to exit)")
-        try:
-            wake.listen_until_woken(recorder)
-        except KeyboardInterrupt:
-            tts.say_offline("Flubber shut down")
-            print("Stopping ...")
+bootstrap(start_main_loop)
