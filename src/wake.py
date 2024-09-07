@@ -1,14 +1,19 @@
 from keys import pico_voice_key
 import pvporcupine
+import platform
 
 
 class Wake:
     def __enter__(self):
-        self.porcupine = pvporcupine.create(
-            access_key=f"{pico_voice_key()}",
-            #keywords=["Computer"]
-            keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
-        )
+        if platform.system() == "Windows":
+            self.porcupine = pvporcupine.create(
+                access_key=f"{pico_voice_key()}", keywords=["computer"]
+            )
+        else:
+            self.porcupine = pvporcupine.create(
+                access_key=f"{pico_voice_key()}",
+                keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
+            )
         print("purcupine started")
         return self
 
