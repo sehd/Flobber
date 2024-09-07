@@ -2,6 +2,7 @@ from pvrecorder import PvRecorder
 import wave
 import struct
 import numpy as np
+from settings import total_recording_length
 
 SILENCE_THRESHOLD = 500
 SILENCE_DURATION = 1
@@ -39,7 +40,7 @@ class Mic:
     def stop_recorder(self):
         self.recorder.stop()
 
-    def record_until_silence(self, path, max_seconds=15):
+    def record_until_silence(self, path, max_seconds=total_recording_length()):
         silence_chunk_limit = int(
             SILENCE_DURATION * self.recorder.sample_rate / self.frame_length
         )
