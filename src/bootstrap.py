@@ -40,7 +40,7 @@ def bootstrap(start_main_loop):
 
             print("Listening ... (press Ctrl+C to exit)")
             try:
-                start_main_loop(recorder,wake)
+                start_main_loop(recorder, wake)
             except KeyboardInterrupt:
                 tts.say_offline("Flubber shut down")
                 print("Stopping ...")
