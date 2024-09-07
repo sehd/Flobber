@@ -22,4 +22,4 @@ def say_openai(text):
     response.write_to_file(speech_file_path)
     play(speech_file_path)
 
-# say_openai("Yes?")
+# say_openai("Emmm...")
