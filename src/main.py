@@ -1,4 +1,4 @@
-from stt import transcribe_audio
+from stt import transcribe_audio_openai
 from speak import play
 from bootstrap import bootstrap
 from chatgpt import get_chatgpt_response
@@ -16,7 +16,7 @@ def start_main_loop(recorder, wake):
         recorder.record_until_silence(command_path)
         recorder.stop_recorder()
         play("assets/predefined_sounds/emm.mp3", block=False)
-        command = transcribe_audio(command_path)
+        command = transcribe_audio_openai(command_path)
         gpt_response = get_chatgpt_response(command)
         say_openai(gpt_response)
 
