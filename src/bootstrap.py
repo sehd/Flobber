@@ -31,6 +31,8 @@ def bootstrap(start_main_loop):
             print("Recording test file... make some noise")
             testRecordingPath = "output/testRecording.wav"
             recorder.record_test_file(testRecordingPath)
+            recorder.stop_recorder()
+
             print("Playing back")
 
             from speak import play
@@ -44,3 +46,8 @@ def bootstrap(start_main_loop):
             except KeyboardInterrupt:
                 tts.say_offline("Flubber shut down")
                 print("Stopping ...")
+            except Exception as ex:
+                if hasattr(ex, "message"):
+                    tts.say_offline(ex.message)
+                else:
+                    tts.say_offline(ex)
