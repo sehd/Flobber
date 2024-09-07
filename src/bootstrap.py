@@ -26,19 +26,20 @@ def bootstrap(start_main_loop):
         with Mic(
             settings.get_mic_device_id(), wake.get_device_frame_length()
         ) as recorder:
-            recorder.start_recorder()
+            if settings.enable_mic_test_on_bootstrap():
+                recorder.start_recorder()
 
-            print("Recording test file... make some noise")
-            testRecordingPath = "output/testRecording.wav"
-            recorder.record_test_file(testRecordingPath)
-            recorder.stop_recorder()
+                print("Recording test file... make some noise")
+                testRecordingPath = "output/testRecording.wav"
+                recorder.record_test_file(testRecordingPath)
+                recorder.stop_recorder()
 
-            print("Playing back")
+                print("Playing back")
 
-            from speak import play
+                from speak import play
 
-            play(testRecordingPath)
-            print(f"Test recording saved in {testRecordingPath}")
+                play(testRecordingPath)
+                print(f"Test recording saved in {testRecordingPath}")
 
             print("Listening ... (press Ctrl+C to exit)")
             try:
@@ -48,6 +49,8 @@ def bootstrap(start_main_loop):
                 print("Stopping ...")
             except Exception as ex:
                 if hasattr(ex, "message"):
+                    print(ex.message)
                     tts.say_offline(ex.message)
                 else:
+                    print(ex)
                     tts.say_offline(ex)

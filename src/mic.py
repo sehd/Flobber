@@ -2,10 +2,7 @@ from pvrecorder import PvRecorder
 import wave
 import struct
 import numpy as np
-from settings import total_recording_length
-
-SILENCE_THRESHOLD = 500
-SILENCE_DURATION = 1
+from settings import total_recording_length, silence_threshold, silence_duration
 
 
 def get_mics():
@@ -16,7 +13,7 @@ def get_mics():
 def _is_silent(data_chunk):
     """Returns 'True' if below the silence threshold"""
     audio_data = np.array(data_chunk, dtype=np.int16)
-    return np.max(audio_data) < SILENCE_THRESHOLD
+    return np.max(audio_data) < silence_threshold()
 
 
 class Mic:
@@ -42,7 +39,7 @@ class Mic:
 
     def record_until_silence(self, path, max_seconds=total_recording_length()):
         silence_chunk_limit = int(
-            SILENCE_DURATION * self.recorder.sample_rate / self.frame_length
+            silence_duration() * self.recorder.sample_rate / self.frame_length
         )
         total_chunk_limit = int(
             max_seconds * self.recorder.sample_rate / self.frame_length
