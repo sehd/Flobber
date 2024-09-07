@@ -6,7 +6,7 @@ class Wake:
     def __enter__(self):
         self.porcupine = pvporcupine.create(
             access_key=f"{pico_voice_key()}",
-            #keywords=["bumblebee"]
+            #keywords=["Computer"]
             keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
         )
         print("purcupine started")
