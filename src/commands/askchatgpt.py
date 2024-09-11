@@ -2,11 +2,11 @@ from tts import say_openai
 from speak import play
 from stt import transcribe_audio_openai
 import chatgpt
-
+from localization import get_localized
 
 def ask_chatgpt(**kwargs):
     recorder = kwargs["recorder"]
-    play("assets/predefined_sounds/yes.mp3")
+    play(get_localized('AUDIO_SURE'))
     command_path = "output/command.wav"
     recorder.start_recorder()
     recorder.record_until_silence(command_path)
