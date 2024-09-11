@@ -5,11 +5,24 @@ from keys import openai_api_key
 import os
 
 
+def _change_voice(engine, language, gender="female"):
+    for voice in engine.getProperty("voices"):
+        if voice.id == language and gender == voice.gender:
+            engine.setProperty("voice", voice.id)
+            return
+
+    for voice in engine.getProperty("voices"):
+        if voice.id == language:
+            engine.setProperty("voice", voice.id)
+            return
+
+    engine.setProperty("voice", 0)
+
+
 def say_offline(text):
     engine = pyttsx3.init()
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id)
-    engine.setProperty("rate", 150)
+    _change_voice(engine, "English (Great Britain)")
+    engine.setProperty
 
     engine.say(text)
     engine.runAndWait()

@@ -1,10 +1,11 @@
 from stt import transcribe_audio_openai
 from speak import play
-from chatgpt import get_chatgpt_response
-from tts import say_openai
+import chatgpt
+from commands import time, askchatgpt
 
 
 def start_main_loop(recorder, wake):
+    supported_commands = _supported_commands.keys()
     while True:
         recorder.start_recorder()
         wake.listen_until_woken(recorder)
@@ -16,5 +17,14 @@ def start_main_loop(recorder, wake):
         recorder.stop_recorder()
         play("assets/predefined_sounds/emm.mp3", block=False)
         command = transcribe_audio_openai(command_path)
-        gpt_response = get_chatgpt_response(command)
-        say_openai(gpt_response)
+        selected_command = chatgpt.get_intent_from_input(command, supported_commands)
+        supported_commands[selected_command](recorder=recorder,command=command)
+
+def unknown_command(**kwargs):
+    print(f"Command not found {kwargs["command"]}")
+
+_supported_commands = {
+    "None":unknown_command,
+    "Ask a question": askchatgpt.ask_chatgpt,
+    "What time is it": time.what_time_is_it,
+}
