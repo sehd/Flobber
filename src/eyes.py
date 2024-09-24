@@ -1,5 +1,10 @@
 import time
-from ..lib import LCD_1inch28
+import sys
+import os
+
+sys.path.append(os.getcwd())
+from lib import LCD_1inch28
+
 from PIL import Image
 
 # Raspberry Pi pin configuration:
