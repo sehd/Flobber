@@ -22,14 +22,18 @@ try:
     display.Init()
     # Clear display.
     display.clear()
-    image = Image.open('../assets/eyes/LeftEyeOpen.jpg')
-    im_r=image.rotate(180)
-    display.ShowImage(im_r)
-    time.sleep(3)
+    while True:
+        image = Image.open('assets/eyes/LeftEyeOpen.jpg')
+        display.ShowImage(image)
+        time.sleep(3)
+        image = Image.open('assets/eyes/LeftEyeClose.jpg')
+        display.ShowImage(image)
+        time.sleep(0.2)
     display.module_exit()
 except IOError as e:
     print("Error in eyes module:")
     print(e)
 except KeyboardInterrupt:
+    display.clear()
     display.module_exit()
     
