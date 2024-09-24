@@ -6,10 +6,12 @@ import platform
 class Wake:
     def __enter__(self):
         if platform.system() == "Windows":
+            print("On windows, wake word is computer")
             self.porcupine = pvporcupine.create(
                 access_key=f"{pico_voice_key()}", keywords=["computer"]
             )
         else:
+            print("On RbPi, wake word = flobber")
             self.porcupine = pvporcupine.create(
                 access_key=f"{pico_voice_key()}",
                 keyword_paths=["assets/wakeword/Flubber_en_raspberry-pi_v3_0_0.ppn"],
