@@ -1,5 +1,5 @@
 import time
-from lib import LCD_1inch28
+from ..lib import LCD_1inch28
 from PIL import Image
 
 # Raspberry Pi pin configuration:
