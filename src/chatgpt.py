@@ -24,3 +24,24 @@ def get_chatgpt_response(prompt):
         raise Exception(f"ChatGPT response is {response.choices[0].finish_reason}")
 
     return stopped_choices[0].message.content
+
+
+def get_intent_from_input(prompt, intents):
+    client = OpenAI(api_key=openai_api_key())
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": _system_role,
+                "content": "Which one of these intents best matches the request? Only respond with a number.\n\n"
+                + "\n".join([f"{i}. {x}" for i, x in enumerate(intents)]),
+            },
+            {"role": _user_role, "content": prompt},
+        ],
+    )
+    stopped_choices = [x for x in response.choices if x.finish_reason == "stop"]
+    if len(stopped_choices) == 0:
+        raise Exception(f"ChatGPT response is {response.choices[0].finish_reason}")
+
+    return int(stopped_choices[0].message.content)

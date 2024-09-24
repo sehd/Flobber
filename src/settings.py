@@ -19,3 +19,7 @@ def silence_duration():
 
 def enable_mic_test_on_bootstrap():
     return os.environ.get("FLOBBER_MIC_TEST_ON_BOOTSTRAP", "True") == "True"
+
+
+def get_language():
+    return os.environ.get("FLOBBER_LANGUAGE", "en")
