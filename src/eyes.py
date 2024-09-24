@@ -29,7 +29,6 @@ try:
         image = Image.open('assets/eyes/LeftEyeClose.jpg')
         display.ShowImage(image)
         time.sleep(0.2)
-    display.module_exit()
 except IOError as e:
     print("Error in eyes module:")
     print(e)
