@@ -10,7 +10,7 @@ def get_chatgpt_response(prompt):
     client = OpenAI(api_key=openai_api_key())
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=[
             {
                 "role": _system_role,
