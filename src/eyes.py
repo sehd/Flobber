@@ -9,7 +9,7 @@ from PIL import Image
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
 
-EyeStates = Enum("EyeStates", ["Off", "Blinking", "Open", "Close"])
+EyeStates = Enum("EyeStates", ["Off", "Open", "Close", "Blinking", "BlinkOnce"])
 
 width = 240
 height = 240
@@ -31,11 +31,11 @@ class Eyes:
             self.displayR.prepare_image(Image.open("assets/eyes/RightEyeOpen.jpg")),
             self.displayL.prepare_image(Image.open("assets/eyes/LeftEyeOpen.jpg")),
         ]
-        self.closeImage = [
+        self.closeImages = [
             self.displayR.prepare_image(Image.open("assets/eyes/RightEyeClose.jpg")),
             self.displayL.prepare_image(Image.open("assets/eyes/LeftEyeClose.jpg")),
         ]
-        self.blackImage = [
+        self.blackImages = [
             self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
             self.displayL.prepare_image(Image.new("RGB", (width, height), "BLACK")),
         ]
@@ -56,7 +56,13 @@ class Eyes:
         print(f"Setting state {eyeState}")
         self.timer.cancel()
         if eyeState == EyeStates.Off:
-            self.set_image(self.blackImage)
+            self.set_image(self.blackImages)
+            self.currentState = eyeState
+        elif eyeState == EyeStates.Open:
+            self.set_image(self.openImages)
+            self.currentState = eyeState
+        elif eyeState == EyeStates.Close:
+            self.set_image(self.closeImages)
             self.currentState = eyeState
         elif eyeState == EyeStates.Blinking:
             if self.currentState != EyeStates.Open:
@@ -71,33 +77,13 @@ class Eyes:
                 [EyeStates.Blinking],
             )
             self.timer.start()
+        elif eyeState == EyeStates.BlinkOnce:
+            self.set_image(self.openImages)
+            time.sleep(1)
+            self.set_state(EyeStates.Close)
+            self.timer = Timer(1, self.set_state, [EyeStates.Off])
+            self.timer.start()
 
     def set_image(self, image):
         self.displayR.show_prepared_image(image[0])
         self.displayL.show_prepared_image(image[1])
-
-
-print("Starting")
-with Eyes() as eyes:
-    print("Started")
-    time.sleep(3)
-    print("Starting blink")
-    eyes.set_state(EyeStates.Blinking)
-
-    time.sleep(3)
-    print("Background working")
-    time.sleep(3)
-    print("Background working")
-    time.sleep(3)
-    print("Background working")
-    time.sleep(3)
-    print("Background working")
-    time.sleep(3)
-    print("Background working")
-
-    print("Closing")
-    eyes.set_state(EyeStates.Off)
-
-    time.sleep(3)
-
-print("Done")

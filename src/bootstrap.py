@@ -38,18 +38,22 @@ with Wake() as wake:
             play(testRecordingPath)
             print(f"Test recording saved in {testRecordingPath}")
 
-        print("Listening ... (press Ctrl+C to exit)")
-        try:
-            from main import start_main_loop
+        from eyes import Eyes, EyeStates
 
-            start_main_loop(recorder, wake)
-        except KeyboardInterrupt:
-            tts.say_offline("Flubber shut down")
-            print("Stopping ...")
-        except Exception as ex:
-            if hasattr(ex, "message"):
-                print(ex.message)
-                tts.say_offline(ex.message)
-            else:
-                print(ex)
-                tts.say_offline(ex)
+        with Eyes() as eyes:
+            eyes.set_state(EyeStates.BlinkOnce)
+            print("Listening ... (press Ctrl+C to exit)")
+            try:
+                from main import start_main_loop
+
+                start_main_loop(recorder, wake, eyes)
+            except KeyboardInterrupt:
+                tts.say_offline("Flubber shut down")
+                print("Stopping ...")
+            except Exception as ex:
+                if hasattr(ex, "message"):
+                    print(ex.message)
+                    tts.say_offline(ex.message)
+                else:
+                    print(ex)
+                    tts.say_offline(ex)
