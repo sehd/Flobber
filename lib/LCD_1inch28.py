@@ -280,6 +280,10 @@ class LCD_1inch28(lcdconfig.RaspberryPi):
     def ShowImage(self, Image):
         """Set buffer to value of Python Imaging Library image."""
         """Write display buffer to physical display"""
+        pix = self.prepare_image(Image)
+        self.show_prepared_image(pix)
+
+    def prepare_image(self, Image):
         imwidth, imheight = Image.size
         if imwidth != self.width or imheight != self.height:
             raise ValueError(
@@ -299,6 +303,9 @@ class LCD_1inch28(lcdconfig.RaspberryPi):
             self.np.right_shift(img[..., [2]], 3),
         )
         pix = pix.flatten().tolist()
+        return pix
+
+    def show_prepared_image(self, pix):
         self.SetWindows(0, 0, self.width, self.height)
         self.digital_write(self.DC_PIN, self.GPIO.HIGH)
         for i in range(0, len(pix), 4096):
