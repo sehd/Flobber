@@ -33,7 +33,11 @@ def say_openai(text):
     speech_file_path = "output/openai.mp3"
     if os.path.exists(speech_file_path):
         os.remove(speech_file_path)
-    response = client.audio.speech.create(model="tts-1", voice="alloy", input=text)
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=text,
+    )
 
     response.write_to_file(speech_file_path)
     play(speech_file_path)

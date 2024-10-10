@@ -1,8 +1,8 @@
 from eyes import EyeStates
 from stt import transcribe_audio_openai
-from speak import play
 import chatgpt
 from commands import time, askchatgpt
+from localization import play_localized, LocalizedSounds
 
 
 def start_main_loop(recorder, wake, eyes):
@@ -11,13 +11,13 @@ def start_main_loop(recorder, wake, eyes):
         recorder.start_recorder()
         wake.listen_until_woken(recorder)
         recorder.stop_recorder()
-        play("assets/predefined_sounds/yes.mp3")
+        play_localized(LocalizedSounds.Yes)
         command_path = "output/command.wav"
         recorder.start_recorder()
         recorder.record_until_silence(command_path)
         recorder.stop_recorder()
         eyes.set_state(EyeStates.Blinking)
-        play("assets/predefined_sounds/emm.mp3", block=False)
+        play_localized(LocalizedSounds.Emm, block=False)
         command = transcribe_audio_openai(command_path)
         selected_command = chatgpt.get_intent_from_input(command, supported_commands)
         supported_commands[selected_command](recorder=recorder, command=command)
