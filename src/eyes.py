@@ -69,7 +69,7 @@ class Eyes:
                 self.set_image(self.openImages)
                 self.currentState = EyeStates.Open
             else:
-                self.set_image(self.closeImage)
+                self.set_image(self.closeImages)
                 self.currentState = EyeStates.Close
             self.timer = Timer(
                 3 if self.currentState == EyeStates.Open else 0.2,
