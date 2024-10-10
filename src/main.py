@@ -6,7 +6,6 @@ from localization import play_localized, LocalizedSounds
 
 
 def start_main_loop(recorder, wake, eyes):
-    supported_commands = _supported_commands.keys()
     while True:
         recorder.start_recorder()
         wake.listen_until_woken(recorder)
@@ -19,8 +18,8 @@ def start_main_loop(recorder, wake, eyes):
         eyes.set_state(EyeStates.Blinking)
         play_localized(LocalizedSounds.Emm, block=False)
         command = transcribe_audio_openai(command_path)
-        selected_command = chatgpt.get_intent_from_input(command, supported_commands)
-        supported_commands[selected_command](recorder=recorder, command=command)
+        selected_command = chatgpt.get_intent_from_input(command, _supported_commands.keys())
+        _supported_commands[selected_command](recorder=recorder, command=command)
         eyes.set_state(EyeStates.Off)
 
 
