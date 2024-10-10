@@ -10,7 +10,10 @@ def get_localized_string(key):
     return _localized_values[key]
 
 
-LocalizedSounds = Enum("predefined_sounds", names={"Yes": "yes.mp3", "Emm": "emm.mp3"})
+LocalizedSounds = Enum(
+    "predefined_sounds",
+    names={"Yes": "yes.mp3", "Emm": "emm.mp3", "OfCourse": "ofcourse.mp3"},
+)
 
 
 def play_localized(sound: LocalizedSounds, block=True):
