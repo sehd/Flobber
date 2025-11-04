@@ -9,7 +9,7 @@ from PIL import Image
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
 
-EyeStates = Enum("EyeStates", ["Off", "Open", "Close", "Blinking", "BlinkOnce"])
+EyeStates = Enum("EyeStates", ["Off", "Open", "Close", "Blinking", "BlinkOnce", "Heart"])
 
 width = 240
 height = 240
@@ -39,6 +39,10 @@ class Eyes:
             self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
             self.displayL.prepare_image(Image.new("RGB", (width, height), "BLACK")),
         ]
+        self.heartImages = [
+            self.displayR.prepare_image(Image.open("assets/eyes/Heart.jpg")),
+            self.displayL.prepare_image(Image.open("assets/eyes/Heart.jpg")),
+        ]
         self.timer = Timer(0, self.set_state, [EyeStates.Off])
 
     def __enter__(self) -> None:
@@ -63,6 +67,9 @@ class Eyes:
             self.currentState = eyeState
         elif eyeState == EyeStates.Close:
             self.set_image(self.closeImages)
+            self.currentState = eyeState
+        elif eyeState == EyeStates.Heart:
+            self.set_image(self.heartImages)
             self.currentState = eyeState
         elif eyeState == EyeStates.Blinking:
             if self.currentState != EyeStates.Open:
