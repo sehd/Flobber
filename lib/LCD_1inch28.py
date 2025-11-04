@@ -3,7 +3,8 @@ from . import lcdconfig
 
 
 class LCD_1inch28(lcdconfig.RaspberryPi):
-
+    
+    window_initialized = False
     width = 240
     height = 240
 
@@ -305,16 +306,19 @@ class LCD_1inch28(lcdconfig.RaspberryPi):
         pix = pix.tobytes()
         return pix
 
+    def init_window(self):
+        if not self.window_initialized:
+            self.SetWindows(0, 0, self.width, self.height)
+            self.window_initialized = True
+
     def show_prepared_image(self, pix):
-        self.SetWindows(0, 0, self.width, self.height)
+        self.init_window()
         self.digital_write(self.DC_PIN, self.GPIO.HIGH)
-        for i in range(0, len(pix), 65536):
-            self.spi_writebyte(pix[i : i + 65536])
+        self.spi_writebyte(pix)
 
     def clear(self):
         """Clear contents of image buffer"""
         _buffer = [0xFF] * (self.width * self.height * 2)
         self.SetWindows(0, 0, self.width, self.height)
         self.digital_write(self.DC_PIN, self.GPIO.HIGH)
-        for i in range(0, len(_buffer), 65536):
-            self.spi_writebyte(_buffer[i : i + 65536])
+        self.spi_writebyte(_buffer)

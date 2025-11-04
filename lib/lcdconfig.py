@@ -39,7 +39,7 @@ class RaspberryPi:
     def __init__(
         self,
         spi=spidev.SpiDev(0, 0),
-        spi_freq=40000000,
+        spi_freq=80000000,
         rst=27,
         dc=25,
         bl=18,

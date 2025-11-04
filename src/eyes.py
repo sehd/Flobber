@@ -5,6 +5,7 @@ import spidev as SPI
 from enum import Enum
 from threading import Timer
 from PIL import Image
+from threading import Thread
 
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
@@ -68,7 +69,6 @@ class Eyes:
         self.displayR.module_exit()
 
     def set_state(self, eyeState: EyeStates):
-        print(f"Setting state {eyeState}")
         self.timer.cancel()
         if eyeState == EyeStates.Off:
             self.set_image(self.blackImages)
@@ -113,5 +113,15 @@ class Eyes:
             self.timer.start()
 
     def set_image(self, image):
-        self.displayR.show_prepared_image(image[0])
-        self.displayL.show_prepared_image(image[1])
+        def write(display, buf):
+            try:
+                display.show_prepared_image(buf)
+            except Exception as e:
+                print("Error writing image to display:", e)
+
+        t1 = Thread(target=write, args=(self.displayR, image[0]), daemon=True)
+        t2 = Thread(target=write, args=(self.displayL, image[1]), daemon=True)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
