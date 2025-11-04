@@ -303,7 +303,7 @@ class LCD_1inch28(lcdconfig.RaspberryPi):
             self.np.bitwise_and(self.np.left_shift(img[..., [1]], 3), 0xE0),
             self.np.right_shift(img[..., [2]], 3),
         )
-        pix = pix.tobytes()
+        pix = memoryview(pix.tobytes())
         return pix
 
     def init_window(self):

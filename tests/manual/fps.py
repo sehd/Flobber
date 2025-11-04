@@ -8,5 +8,5 @@ with Eyes() as eyes:
         eyes.set_state(EyeStates.Open)
         eyes.set_state(EyeStates.Close)
         frames+=2
-        if frames%1000==0:
+        if frames%100==0:
             print(f"{frames/(time()-start_time)} FPS")
