@@ -31,12 +31,12 @@ class Eyes:
         self.displayL.Init()
         # Load images
         self.openImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/EyeOpen.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/EyeOpen.jpg")),
+            self.displayR.prepare_image(load_image("assets/eyes/Open.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/Open.jpg")),
         ]
         self.closeImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/RightEyeClose.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/LeftEyeClose.jpg")),
+            self.displayR.prepare_image(load_image("assets/eyes/Close.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/Close.jpg")),
         ]
         self.blackImages = [
             self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
