@@ -14,6 +14,9 @@ EyeStates = Enum("EyeStates", ["Off", "Open", "Close", "Blinking", "BlinkOnce", 
 width = 240
 height = 240
 
+def load_image(path: str) -> Image.Image:
+    image = Image.open(path)
+    return image.rotate(180)
 
 class Eyes:
     def __init__(self) -> None:
@@ -28,20 +31,20 @@ class Eyes:
         self.displayL.Init()
         # Load images
         self.openImages = [
-            self.displayR.prepare_image(Image.open("assets/eyes/RightEyeOpen.jpg")),
-            self.displayL.prepare_image(Image.open("assets/eyes/LeftEyeOpen.jpg")),
+            self.displayR.prepare_image(load_image("assets/eyes/EyeOpen.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/EyeOpen.jpg")),
         ]
         self.closeImages = [
-            self.displayR.prepare_image(Image.open("assets/eyes/RightEyeClose.jpg")),
-            self.displayL.prepare_image(Image.open("assets/eyes/LeftEyeClose.jpg")),
+            self.displayR.prepare_image(load_image("assets/eyes/RightEyeClose.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/LeftEyeClose.jpg")),
         ]
         self.blackImages = [
-            self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
-            self.displayL.prepare_image(Image.new("RGB", (width, height), "BLACK")),
+            self.displayR.prepare_image(load_image("RGB", (width, height), "BLACK")),
+            self.displayL.prepare_image(load_image("RGB", (width, height), "BLACK")),
         ]
         self.heartImages = [
-            self.displayR.prepare_image(Image.open("assets/eyes/Heart.jpg")),
-            self.displayL.prepare_image(Image.open("assets/eyes/Heart.jpg")),
+            self.displayR.prepare_image(load_image("assets/eyes/Heart.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/Heart.jpg")),
         ]
         self.timer = Timer(0, self.set_state, [EyeStates.Off])
 
