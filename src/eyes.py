@@ -9,14 +9,18 @@ from PIL import Image
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
 
-EyeStates = Enum("EyeStates", ["Off", "Open", "Close", "Blinking", "BlinkOnce", "Heart"])
+EyeStates = Enum(
+    "EyeStates", ["Off", "Open", "HalfOpen", "Close", "Blinking", "BlinkOnce", "Heart"]
+)
 
 width = 240
 height = 240
 
+
 def load_image(path: str) -> Image.Image:
     image = Image.open(path)
     return image.rotate(180)
+
 
 class Eyes:
     def __init__(self) -> None:
@@ -33,6 +37,10 @@ class Eyes:
         self.openImages = [
             self.displayR.prepare_image(load_image("assets/eyes/Open.jpg")),
             self.displayL.prepare_image(load_image("assets/eyes/Open.jpg")),
+        ]
+        self.halfOpenImages = [
+            self.displayR.prepare_image(load_image("assets/eyes/HalfOpen.jpg")),
+            self.displayL.prepare_image(load_image("assets/eyes/HalfOpen.jpg")),
         ]
         self.closeImages = [
             self.displayR.prepare_image(load_image("assets/eyes/Close.jpg")),
@@ -75,14 +83,24 @@ class Eyes:
             self.set_image(self.heartImages)
             self.currentState = eyeState
         elif eyeState == EyeStates.Blinking:
-            if self.currentState != EyeStates.Open:
+            if self.currentState == EyeStates.Close:
                 self.set_image(self.openImages)
                 self.currentState = EyeStates.Open
+                sleep = 3
+            elif self.currentState == EyeStates.HalfOpen:
+                self.set_image(self.closeImages)
+                self.currentState = EyeStates.Close
+                sleep = 0.2
+            elif self.currentState == EyeStates.Open:
+                self.set_image(self.halfOpenImages)
+                self.currentState = EyeStates.HalfOpen
+                sleep = 0.1
             else:
                 self.set_image(self.closeImages)
                 self.currentState = EyeStates.Close
+                sleep = 0.2
             self.timer = Timer(
-                3 if self.currentState == EyeStates.Open else 0.2,
+                sleep,
                 self.set_state,
                 [EyeStates.Blinking],
             )
