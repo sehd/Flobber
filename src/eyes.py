@@ -39,8 +39,8 @@ class Eyes:
             self.displayL.prepare_image(load_image("assets/eyes/LeftEyeClose.jpg")),
         ]
         self.blackImages = [
-            self.displayR.prepare_image(load_image("RGB", (width, height), "BLACK")),
-            self.displayL.prepare_image(load_image("RGB", (width, height), "BLACK")),
+            self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
+            self.displayL.prepare_image(Image.new("RGB", (width, height), "BLACK")),
         ]
         self.heartImages = [
             self.displayR.prepare_image(load_image("assets/eyes/Heart.jpg")),
