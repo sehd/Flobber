@@ -80,7 +80,7 @@ class RaspberryPi:
 
     def spi_writebyte(self, data):
         if self.SPI != None:
-            self.SPI.xfer3(data)
+            self.SPI.writebytes2(data)
 
     def bl_DutyCycle(self, duty):
         self._pwm.ChangeDutyCycle(duty)
