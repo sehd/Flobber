@@ -1,5 +1,5 @@
 from openai import OpenAI
-from keys import openai_api_key
+from src.keys import openai_api_key
 
 _system_role = "system"  # The system message is optional and can be used to set the behaviour of the assistant
 _user_role = "user"  # The user messages provide requests or comments for the assistant to respond to

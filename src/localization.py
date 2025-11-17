@@ -1,5 +1,5 @@
-from settings import get_language
-from speak import play
+from src.settings import get_language
+from src.speak import play
 from enum import Enum
 
 with open(f"assets/{get_language()}/strings.csv") as strings:

@@ -2,7 +2,7 @@ from pvrecorder import PvRecorder
 import wave
 import struct
 import numpy as np
-from settings import total_recording_length, silence_threshold, silence_duration
+from src.settings import total_recording_length, silence_threshold, silence_duration
 
 
 def get_mics():

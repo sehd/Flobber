@@ -1,8 +1,8 @@
-from eyes import EyeStates
-from stt import transcribe_audio_openai
-import chatgpt
-from commands import time, askchatgpt
-from localization import play_localized, LocalizedSounds
+from src.eyes import EyeStates
+from src.stt import transcribe_audio_openai
+import src.chatgpt as chatgpt
+from src.commands import time, askchatgpt
+from src.localization import play_localized, LocalizedSounds
 
 
 def start_main_loop(recorder, wake, eyes):

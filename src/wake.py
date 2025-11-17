@@ -1,4 +1,4 @@
-from keys import pico_voice_key
+from src.keys import pico_voice_key
 import pvporcupine
 
 

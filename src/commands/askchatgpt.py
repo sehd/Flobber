@@ -1,7 +1,7 @@
-from tts import say_openai
-from stt import transcribe_audio_openai
-import chatgpt
-from localization import play_localized, LocalizedSounds
+from src.tts import say_openai
+from src.stt import transcribe_audio_openai
+import src.chatgpt as chatgpt
+from src.localization import play_localized, LocalizedSounds
 
 
 def ask_chatgpt(**kwargs):

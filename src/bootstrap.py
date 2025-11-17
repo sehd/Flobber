@@ -2,14 +2,14 @@ print("Starting up...")
 
 print("Testing tts...")
 
-import tts
+import src.tts as tts
 
 tts.say_offline("Starting up")
 
 print("Starting mic...")
 
-from mic import Mic, get_mics
-from wake import Wake
+from src.mic import Mic, get_mics
+from src.wake import Wake
 
 mics = [x for x in get_mics()]
 print("\n".join(mics))
@@ -17,7 +17,7 @@ if len(mics) == 0:
     print("No microphone found.")
     exit()
 
-import settings
+import src.settings as settings
 
 print(f"Selected mic: {mics[settings.get_mic_device_id()]}")
 with Wake() as wake:
@@ -36,18 +36,18 @@ with Wake() as wake:
 
             print("Playing back")
 
-            from speak import play
+            from src.speak import play
 
             play(testRecordingPath)
             print(f"Test recording saved in {testRecordingPath}")
 
-        from eyes import Eyes, EyeStates
+        from src.eyes import Eyes, EyeStates
 
         with Eyes() as eyes:
             eyes.set_state(EyeStates.BlinkOnce)
             print("Listening ... (press Ctrl+C to exit)")
             try:
-                from main import start_main_loop
+                from src.main import start_main_loop
 
                 start_main_loop(recorder, wake, eyes)
             except KeyboardInterrupt:
