@@ -1,7 +1,7 @@
 import pyttsx3
 from openai import OpenAI
-from speak import play
-from keys import openai_api_key
+from src.speak import play
+from src.keys import openai_api_key
 import os
 
 

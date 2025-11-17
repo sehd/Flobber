@@ -1,7 +1,7 @@
 from openai import OpenAI
-from keys import openai_api_key
+from src.keys import openai_api_key
 import platform
-from settings import get_language
+from src.settings import get_language
 
 if platform.system() == "Windows":
     import whisper
