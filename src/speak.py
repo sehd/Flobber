@@ -1,5 +1,5 @@
-from playsound import playsound
+from playsound3 import playsound
 
 
 def play(path, block=True):
-    playsound(path, block=block)
+    playsound(path, block=block, backend="ffplay")

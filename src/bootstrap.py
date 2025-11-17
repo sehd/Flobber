@@ -23,6 +23,9 @@ print(f"Selected mic: {mics[settings.get_mic_device_id()]}")
 with Wake() as wake:
     print(f"Starting wake. Frame length = {wake.get_device_frame_length()}")
     with Mic(settings.get_mic_device_id(), wake.get_device_frame_length()) as recorder:
+        from playsound3 import playsound, AVAILABLE_BACKENDS, DEFAULT_BACKEND
+        print(AVAILABLE_BACKENDS, DEFAULT_BACKEND)
+
         if settings.enable_mic_test_on_bootstrap():
             recorder.start_recorder()
 

@@ -4,7 +4,7 @@ from src.speak import play
 
 def get_audio_files():
     audio_files = []
-    output_dir = "../../output"
+    output_dir = "output"
 
     if not os.path.exists(output_dir):
         return audio_files
@@ -22,10 +22,11 @@ if __name__ == "__main__":
     for f, i in enumerate(files):
         print(f"{i} - {f}")
 
-    choice = input("Select a file to play by number or insert path: ")
-    if choice.isdigit() and int(choice) < len(files):
-        selected_file = files[int(choice)]
-    else:
-        selected_file = choice
+    while True:
+        choice = input("Select a file to play by number or insert path: ")
+        if choice.isdigit() and int(choice) < len(files):
+            selected_file = files[int(choice)]
+        else:
+            selected_file = choice
 
-    play(selected_file)
+        play(selected_file)
