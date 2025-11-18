@@ -1,4 +1,4 @@
-from openai import OpenAI
+from openai import OpenAI, ModelSettings, Reasoning
 from src.keys import openai_api_key
 
 _system_role = "system"  # The system message is optional and can be used to set the behaviour of the assistant
@@ -10,11 +10,11 @@ def get_chatgpt_response(prompt):
     client = OpenAI(api_key=openai_api_key())
 
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-5",
         messages=[
             {
                 "role": _system_role,
-                "content": "Respond very briefly in a kind friend tone with factual information.",
+                "content": "Respond very briefly like a kid that knows stuff.",
             },
             {"role": _user_role, "content": prompt},
         ],
@@ -30,7 +30,8 @@ def get_intent_from_input(prompt, intents):
     client = OpenAI(api_key=openai_api_key())
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5-nano",
+        model_settings=ModelSettings(reasoning=Reasoning(effort="minimal"), verbosity="low"),
         messages=[
             {
                 "role": _system_role,

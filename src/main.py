@@ -10,15 +10,22 @@ def start_main_loop(recorder, wake, eyes):
         recorder.start_recorder()
         wake.listen_until_woken(recorder)
         recorder.stop_recorder()
+
         play_localized(LocalizedSounds.Yes)
+
         command_path = "output/command.wav"
         recorder.start_recorder()
         recorder.record_until_silence(command_path)
+        print("command received")
         recorder.stop_recorder()
+
         eyes.set_state(EyeStates.Blinking)
         play_localized(LocalizedSounds.Emm)
         command = transcribe_audio_openai(command_path)
-        selected_command = chatgpt.get_intent_from_input(command, _supported_commands.keys())
+        supported_commands_keys=_supported_commands.keys()
+        selected_command = supported_commands_keys[chatgpt.get_intent_from_input(command, supported_commands_keys)]
+        print(f"Command recognized: {selected_command}")
+
         _supported_commands[selected_command](recorder=recorder, command=command)
         eyes.set_state(EyeStates.Off)
 
@@ -29,6 +36,7 @@ def unknown_command(**kwargs):
 
 _supported_commands = {
     "None": unknown_command,
-    "Ask a question": askchatgpt.ask_chatgpt,
+    "Asking a question": askchatgpt.ask_chatgpt_directly,
+    "A question is coming up": askchatgpt.ask_chatgpt,
     "What time is it": time.what_time_is_it,
 }
