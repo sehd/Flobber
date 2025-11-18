@@ -31,7 +31,6 @@ def get_intent_from_input(prompt, intents):
 
     response = client.chat.completions.create(
         model="gpt-5-nano",
-        max_completion_tokens=4,
         messages=[
             {
                 "role": _system_role,

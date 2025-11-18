@@ -22,8 +22,10 @@ def start_main_loop(recorder, wake, eyes):
         eyes.set_state(EyeStates.Blinking)
         play_localized(LocalizedSounds.Emm)
         command = transcribe_audio_openai(command_path)
-        supported_commands_keys=_supported_commands.keys()
-        selected_command = supported_commands_keys[chatgpt.get_intent_from_input(command, supported_commands_keys)]
+        supported_commands_keys = _supported_commands.keys()
+        selected_command = supported_commands_keys[
+            chatgpt.get_intent_from_input(command, supported_commands_keys)
+        ]
         print(f"Command recognized: {selected_command}")
 
         _supported_commands[selected_command](recorder=recorder, command=command)
