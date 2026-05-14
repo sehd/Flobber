@@ -1,5 +1,5 @@
 from openai import OpenAI
-from src.keys import openai_api_key
+from src.settings import openai_api_key
 import platform
 from src.settings import get_language
 

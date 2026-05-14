@@ -23,3 +23,10 @@ def enable_mic_test_on_bootstrap():
 
 def get_language():
     return os.environ.get("FLOBBER_LANGUAGE", "en")
+
+def pico_voice_key():
+    return os.environ.get("FLOBBER_PICO_VOICE_KEY", "")
+
+
+def openai_api_key():
+    return os.environ.get("FLOBBER_OPENAI_KEY", "")
