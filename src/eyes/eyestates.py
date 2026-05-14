@@ -6,6 +6,7 @@ class Animation(ABC):
     width = 240
     height = 240
 
+    @staticmethod
     def load_image(path: str) -> Image.Image:
         image = Image.open(path)
         return image.rotate(180)
