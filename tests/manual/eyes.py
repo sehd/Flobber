@@ -5,15 +5,14 @@ request = input("Enter eye state (Off, Open, Blinking): ")
 
 
 def get_state(request: str):
-    match request.lower():
-        case "open":
-            return states.FullOpen()
-        case "off":
-            return states.Off()
-        case "blinking":
-            return states.Blinking()
-        case "blink":
-            return states.BlinkOnce()
+    if request.lower() == "open":
+        return states.FullOpen()
+    if request.lower() == "off":
+        return states.Off()
+    if request.lower() == "blinking":
+        return states.Blinking()
+    if request.lower() == "blink":
+        return states.BlinkOnce()
     return None
 
 
