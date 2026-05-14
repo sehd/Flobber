@@ -40,13 +40,13 @@ class Eyes:
         if self.timer is not None:
             self.timer.cancel()
         eyeState.init([self.displayL, self.displayR])
-        self.state = eyeState
+        self.eyeState = eyeState
         self.update()
 
     def update(self):
-        if self.state is None:
+        if self.eyeState is None:
             return
-        images = self.state.update()
+        images = self.eyeState.update()
         self.set_image(images)
 
         if self.eyeState.update_interval() > 0:
