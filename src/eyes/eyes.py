@@ -50,7 +50,8 @@ class Eyes:
         self.set_image(images)
 
         if self.eyeState.update_interval() > 0:
-            self.timer = Timer(self.eyeState.update_interval(), self.update).start()
+            self.timer = Timer(self.eyeState.update_interval(), self.update)
+            self.timer.start()
 
     def set_image(self, image):
         def write(display, buf):

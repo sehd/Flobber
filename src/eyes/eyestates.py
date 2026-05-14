@@ -69,7 +69,7 @@ class Blinking(Animation):
         self.close = self.prepare_image(closeImage, closeImage)
 
     def update_interval(self):
-        return 3 if self.frame == 0 else 0.1 if self.frame == 1 else 0.2
+        return 3 if self.frame == 1 else 0.1 if self.frame == 2 else 0.2
 
     def update(self):
         if self.frame == 0:
@@ -95,7 +95,7 @@ class BlinkOnce(Animation):
         self.off = self.prepare_image(offImage, offImage)
 
     def update_interval(self):
-        return 1 if self.frame != 2 else 0
+        return 1 if self.frame != 3 else 0
 
     def update(self):
         if self.frame == 0:
@@ -104,4 +104,5 @@ class BlinkOnce(Animation):
         if self.frame == 1:
             self.frame == 2
             return self.close
+        self.frame = 3
         return self.off

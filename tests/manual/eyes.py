@@ -1,16 +1,19 @@
 from src.eyes.eyes import Eyes
-from src.eyes.eyestates import FullOpen, Off, Blinking
+import src.eyes.eyestates as states
 
 request = input("Enter eye state (Off, Open, Blinking): ")
 
 
 def get_state(request: str):
-    if request.lower() == "open":
-        return FullOpen()
-    if request.lower() == "off":
-        return Off()
-    if request.lower() == "blinking":
-        return Blinking()
+    match request.lower():
+        case "open":
+            return states.FullOpen()
+        case "off":
+            return states.Off()
+        case "blinking":
+            return states.Blinking()
+        case "blink":
+            return states.BlinkOnce()
     return None
 
 
