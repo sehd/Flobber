@@ -61,4 +61,7 @@ def bootstrap():
 
 
 if __name__ == "__main__":
-    bootstrap()
+    try:
+        bootstrap()
+    except Exception as ex:
+        log_error(ex)

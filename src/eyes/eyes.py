@@ -21,6 +21,7 @@ class Eyes:
         # Initialize library.
         self.displayL.Init()
         self.displayR.Init()
+        self.timer = None
 
     def __enter__(self) -> None:
         # Clear display.
@@ -49,7 +50,7 @@ class Eyes:
         self.set_image(images)
 
         if self.eyeState.update_interval() > 0:
-            Timer(self.eyeState.update_interval(), self.update).start()
+            self.timer = Timer(self.eyeState.update_interval(), self.update).start()
 
     def set_image(self, image):
         def write(display, buf):
