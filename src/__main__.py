@@ -1,4 +1,4 @@
-from memory.log import log, Level
+from src.memory.log import log, Level
 import src.tts as tts
 from src.ears.mic import Mic, get_mics
 from src.ears.wake import Wake

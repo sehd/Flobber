@@ -2,7 +2,7 @@ import sys
 import os
 import spidev as SPI
 from threading import Thread, Timer
-from memory.log import log, Level
+from src.memory.log import log, Level
 from eyestates import Animation, Off
 
 sys.path.append(os.getcwd())
