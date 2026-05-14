@@ -2,8 +2,8 @@ import sys
 import os
 import spidev as SPI
 from threading import Thread, Timer
-from src.memory.log import log, Level
-from eyestates import Animation, Off
+from src.memory.log import log_error
+from src.eyes.eyestates import Animation, Off
 
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
@@ -56,7 +56,7 @@ class Eyes:
             try:
                 display.show_prepared_image(buf)
             except Exception as e:
-                log(f"Error writing image to display: {e}", Level.Error)
+                log_error(f"Error writing image to display: {e}")
 
         t1 = Thread(target=write, args=(self.displayL, image[0]), daemon=True)
         t2 = Thread(target=write, args=(self.displayR, image[1]), daemon=True)

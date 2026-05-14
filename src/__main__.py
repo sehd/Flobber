@@ -1,4 +1,4 @@
-from src.memory.log import log, Level
+from src.memory.log import log, log_error
 import src.tts as tts
 from src.ears.mic import Mic, get_mics
 from src.ears.wake import Wake
@@ -33,7 +33,7 @@ def bootstrap():
     mics = [x for x in get_mics()]
     log("\n".join(mics))
     if len(mics) == 0:
-        log("No microphone found.", Level.Error)
+        log_error("No microphone found.")
         exit()
 
     log(f"Selected mic: {mics[settings.get_mic_device_id()]}")
@@ -55,9 +55,9 @@ def bootstrap():
                     log("Stopping ...")
                 except Exception as ex:
                     if hasattr(ex, "message"):
-                        log(ex.message, Level.Error)
+                        log_error(ex.message)
                     else:
-                        log(ex, Level.Error)
+                        log_error(ex)
 
 
 if __name__ == "__main__":

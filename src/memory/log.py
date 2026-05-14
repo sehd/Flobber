@@ -1,17 +1,40 @@
-from enum import Enum
-from datetime import date, datetime
+from pathlib import Path
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
-currentDate = None
-file = None
+Path("output/logs").mkdir(parents=True, exist_ok=True)
 
-Level = Enum("Level", ["Error", "Warning", "Info"])
+logger = logging.getLogger("Flobber")
+logger.setLevel(logging.INFO)
+
+handler = TimedRotatingFileHandler(
+    "output/logs/app.log",
+    when="midnight",
+    interval=1,
+    backupCount=14,
+    encoding="utf-8",
+)
+
+handler.setFormatter(
+    logging.Formatter(
+        "%(asctime)s\t%(levelname)s:\t%(message)s",
+        datefmt="%H:%M:%S",
+    )
+)
+
+logger.addHandler(handler)
 
 
-def log(content, level: Level = Level.Info):
-    if file is None or currentDate != date.today():
-        currentDate = date.today()
-        file = open("output/logs/{currentDate}.txt", "at")
-
-    file.write(f"{datetime.now().time()}\t{level}: \t{content}\n")
-    file.flush()
+def log(content):
+    logger.info(content)
     print(content)
+
+
+def log_error(content):
+    logger.error(content)
+    print(f"Error:{content}")
+
+
+def log_warning(content):
+    logger.warning(content)
+    print(f"Warning:{content}")
