@@ -1,4 +1,4 @@
-from src.settings import get_language
+from src.memory.settings import get_language
 from src.speak import play
 from enum import Enum
 

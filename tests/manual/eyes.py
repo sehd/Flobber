@@ -1,4 +1,4 @@
-from src.eyes import Eyes, EyeStates
+from src.eyes.eyes import Eyes, EyeStates
 
 state = input("Enter eye state (Off, Open, Close, Blinking, Heart): ")
 

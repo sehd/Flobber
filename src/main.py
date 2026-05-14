@@ -1,4 +1,4 @@
-from src.eyes import EyeStates
+from src.eyes.eyes import EyeStates
 from src.stt import transcribe_audio_openai
 import src.chatgpt as chatgpt
 from src.commands import time, askchatgpt

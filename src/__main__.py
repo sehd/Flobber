@@ -1,10 +1,10 @@
 from memory.log import log, Level
 import src.tts as tts
-from src.mic import Mic, get_mics
-from src.wake import Wake
-import src.settings as settings
+from src.ears.mic import Mic, get_mics
+from src.ears.wake import Wake
+import src.memory.settings as settings
 from playsound3 import playsound, AVAILABLE_BACKENDS, DEFAULT_BACKEND
-from src.eyes import Eyes, EyeStates
+from src.eyes.eyes import Eyes, EyeStates
 from src.main import start_main_loop
 
 

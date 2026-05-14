@@ -1,4 +1,4 @@
-from src.eyes import Eyes, EyeStates
+from src.eyes.eyes import Eyes, EyeStates
 from time import time
 
 with Eyes() as eyes:

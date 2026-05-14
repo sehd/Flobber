@@ -1,4 +1,4 @@
-from src.settings import pico_voice_key
+from src.memory.settings import pico_voice_key
 import pvporcupine
 
 
