@@ -1,126 +1,65 @@
-import time
 import sys
 import os
 import spidev as SPI
-from enum import Enum
-from threading import Timer
-from PIL import Image
-from threading import Thread
+from threading import Thread, Timer
+from memory.log import log, Level
+from eyestates import Animation, Off
 
 sys.path.append(os.getcwd())
 from lib import LCD_1inch28
 
-EyeStates = Enum(
-    "EyeStates", ["Off", "Open", "HalfOpen", "Close", "Blinking", "BlinkOnce", "Heart"]
-)
-
-width = 240
-height = 240
-
-
-def load_image(path: str) -> Image.Image:
-    image = Image.open(path)
-    return image.rotate(180)
-
 
 class Eyes:
     def __init__(self) -> None:
-        self.displayR = LCD_1inch28.LCD_1inch28(
-            spi=SPI.SpiDev(1, 0), rst=22, dc=24, bl=12
-        )
         self.displayL = LCD_1inch28.LCD_1inch28(
             spi=SPI.SpiDev(0, 0), rst=27, dc=25, bl=6
         )
+        self.displayR = LCD_1inch28.LCD_1inch28(
+            spi=SPI.SpiDev(1, 0), rst=22, dc=24, bl=12
+        )
+
         # Initialize library.
-        self.displayR.Init()
         self.displayL.Init()
-        # Load images
-        self.openImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/Open.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/Open.jpg")),
-        ]
-        self.halfOpenImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/HalfOpen.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/HalfOpen.jpg")),
-        ]
-        self.closeImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/Close.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/Close.jpg")),
-        ]
-        self.blackImages = [
-            self.displayR.prepare_image(Image.new("RGB", (width, height), "BLACK")),
-            self.displayL.prepare_image(Image.new("RGB", (width, height), "BLACK")),
-        ]
-        self.heartImages = [
-            self.displayR.prepare_image(load_image("assets/eyes/Heart.jpg")),
-            self.displayL.prepare_image(load_image("assets/eyes/Heart.jpg")),
-        ]
-        self.timer = Timer(0, self.set_state, [EyeStates.Off])
+        self.displayR.Init()
 
     def __enter__(self) -> None:
         # Clear display.
-        self.set_state(EyeStates.Off)
+        self.set_state(Off())
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.set_state(EyeStates.Off)
+        if self.timer is not None:
+            self.timer.cancel()
+        self.set_state(Off())
         self.displayL.module_exit()
         self.displayR.module_exit()
 
-    def set_state(self, eyeState: EyeStates):
-        self.timer.cancel()
-        if eyeState == EyeStates.Off:
-            self.set_image(self.blackImages)
-            self.currentState = eyeState
-        elif eyeState == EyeStates.Open:
-            self.set_image(self.openImages)
-            self.currentState = eyeState
-        elif eyeState == EyeStates.Close:
-            self.set_image(self.closeImages)
-            self.currentState = eyeState
-        elif eyeState == EyeStates.Heart:
-            self.set_image(self.heartImages)
-            self.currentState = eyeState
-        elif eyeState == EyeStates.Blinking:
-            if self.currentState == EyeStates.Close:
-                self.set_image(self.openImages)
-                self.currentState = EyeStates.Open
-                sleep = 3
-            elif self.currentState == EyeStates.HalfOpen:
-                self.set_image(self.closeImages)
-                self.currentState = EyeStates.Close
-                sleep = 0.2
-            elif self.currentState == EyeStates.Open:
-                self.set_image(self.halfOpenImages)
-                self.currentState = EyeStates.HalfOpen
-                sleep = 0.1
-            else:
-                self.set_image(self.closeImages)
-                self.currentState = EyeStates.Close
-                sleep = 0.2
-            self.timer = Timer(
-                sleep,
-                self.set_state,
-                [EyeStates.Blinking],
-            )
-            self.timer.start()
-        elif eyeState == EyeStates.BlinkOnce:
-            self.set_image(self.openImages)
-            time.sleep(1)
-            self.set_state(EyeStates.Close)
-            self.timer = Timer(1, self.set_state, [EyeStates.Off])
-            self.timer.start()
+    def set_state(self, eyeState: Animation):
+        if self.timer is not None:
+            self.timer.cancel()
+        eyeState.init([self.displayL, self.displayR])
+        self.state = eyeState
+        self.update()
+
+    def update(self):
+        if self.state is None:
+            return
+        images = self.state.update()
+        self.set_image(images)
+
+        if self.eyeState.update_interval() > 0:
+            Timer(self.eyeState.update_interval(), self.update).start()
 
     def set_image(self, image):
         def write(display, buf):
             try:
                 display.show_prepared_image(buf)
             except Exception as e:
-                print("Error writing image to display:", e)
+                log(f"Error writing image to display: {e}", Level.Error)
 
-        t1 = Thread(target=write, args=(self.displayR, image[0]), daemon=True)
-        t2 = Thread(target=write, args=(self.displayL, image[1]), daemon=True)
+        t1 = Thread(target=write, args=(self.displayL, image[0]), daemon=True)
+        t2 = Thread(target=write, args=(self.displayR, image[1]), daemon=True)
         t1.start()
         t2.start()
         t1.join()

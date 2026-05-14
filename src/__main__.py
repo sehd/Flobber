@@ -4,7 +4,8 @@ from src.ears.mic import Mic, get_mics
 from src.ears.wake import Wake
 import src.memory.settings as settings
 from playsound3 import playsound, AVAILABLE_BACKENDS, DEFAULT_BACKEND
-from src.eyes.eyes import Eyes, EyeStates
+from src.eyes.eyes import Eyes
+from src.eyes.eyestates import BlinkOnce
 from src.main import start_main_loop
 
 
@@ -46,7 +47,7 @@ def bootstrap():
                 test_mic(recorder)
 
             with Eyes() as eyes:
-                eyes.set_state(EyeStates.BlinkOnce)
+                eyes.set_state(BlinkOnce())
                 log("Listening ...")
                 try:
                     start_main_loop(recorder, wake, eyes)

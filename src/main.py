@@ -1,4 +1,4 @@
-from src.eyes.eyes import EyeStates
+import src.eyes.eyestates as EyeStates
 from src.stt import transcribe_audio_openai
 import src.chatgpt as chatgpt
 from src.commands import time, askchatgpt
@@ -11,7 +11,7 @@ def start_main_loop(recorder, wake, eyes):
         wake.listen_until_woken(recorder)
         recorder.stop_recorder()
 
-        eyes.set_state(EyeStates.Open)
+        eyes.set_state(EyeStates.FullOpen())
 
         command_path = "output/command.wav"
         recorder.start_recorder()
@@ -19,7 +19,7 @@ def start_main_loop(recorder, wake, eyes):
         print("command received")
         recorder.stop_recorder()
 
-        eyes.set_state(EyeStates.Blinking)
+        eyes.set_state(EyeStates.Blinking())
         play_localized(LocalizedSounds.Emm)
         command = transcribe_audio_openai(command_path)
         supported_commands_keys = list(_supported_commands.keys())
@@ -29,7 +29,7 @@ def start_main_loop(recorder, wake, eyes):
         print(f"Command recognized: {selected_command}")
 
         _supported_commands[selected_command](recorder=recorder, command=command)
-        eyes.set_state(EyeStates.Off)
+        eyes.set_state(EyeStates.Off())
 
 
 def unknown_command(**kwargs):
