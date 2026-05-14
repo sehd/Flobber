@@ -1,1 +1,1 @@
-/usr/bin/python3 -m src.bootstrap
+/usr/bin/python3 -m src

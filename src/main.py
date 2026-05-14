@@ -11,7 +11,7 @@ def start_main_loop(recorder, wake, eyes):
         wake.listen_until_woken(recorder)
         recorder.stop_recorder()
 
-        play_localized(LocalizedSounds.Yes)
+        eyes.set_state(EyeStates.Open)
 
         command_path = "output/command.wav"
         recorder.start_recorder()
