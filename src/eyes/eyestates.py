@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from PIL import Image
+from PIL import Image, ImageDraw
+from datetime import datetime
+from math import cos, sin, pi
 
 
 class Animation(ABC):
@@ -106,3 +108,78 @@ class BlinkOnce(Animation):
             return self.close
         self.frame = 3
         return self.off
+
+
+class ClockMode(Animation):
+    color_outer = "#D35400"
+    color_inner = "#FF8A00"
+
+    def init(self, displays):
+        super().init(displays)
+        self.clockFace = self.load_image("assets/eyes/ClockFaceBlue.png")
+        self.blankImage = Image.new("RGB", (self.width, self.height), "BLACK")
+
+        center = (120, 120)
+        l_h = 60
+        w_h = 6
+
+        l_m = 85
+        w_m = 5
+
+        rim_outer = 7
+        self.rim_inner = 3
+
+        self.hour_hand_coordinates = []
+        for h in range(12):
+            s = sin(pi * h / 6)
+            c = cos(pi * h / 6)
+            c1 = (center[0] + l_h * s, center[1] - l_h * c)
+            c2 = (center[0] + w_h * c, center[1] + w_h * s)
+            c3 = (center[0] - w_h * c, center[1] - w_h * s)
+            self.hour_hand_coordinates.append([c1, c2, c3])
+
+        self.minute_hand_coordinates = []
+        for m in range(60):
+            s = sin(pi * m / 30)
+            c = cos(pi * m / 30)
+            c1 = (center[0] + l_m * s, center[1] - l_m * c)
+            c2 = (center[0] + w_m * c, center[1] + w_m * s)
+            c3 = (center[0] - w_m * c, center[1] - w_m * s)
+            self.minute_hand_coordinates.append([c1, c2, c3])
+
+        self.outer_circle = [
+            center[0] - rim_outer,
+            center[1] - rim_outer,
+            center[0] + rim_outer,
+            center[1] + rim_outer,
+        ]
+
+    def update_interval(self):
+        return 60
+
+    def update(self):
+        h = datetime.now().hour % 12
+        m = datetime.now().minute
+
+        clock = self.clockFace.copy()
+        draw = ImageDraw.Draw(clock)
+        draw.polygon(
+            self.hour_hand_coordinates[h],
+            fill=self.color_inner,
+            outline=self.color_outer,
+            width=2,
+        )
+        draw.polygon(
+            self.minute_hand_coordinates[m],
+            fill=self.color_inner,
+            outline=self.color_outer,
+            width=2,
+        )
+        draw.ellipse(
+            self.outer_circle,
+            fill="black",
+            outline=self.color_outer,
+            width=self.rim_inner,
+        )
+
+        return self.prepare_image(clock, self.blankImage)

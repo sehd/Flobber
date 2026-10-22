@@ -5,7 +5,7 @@ from src.ears.wake import Wake
 import src.memory.settings as settings
 from playsound3 import playsound, AVAILABLE_BACKENDS, DEFAULT_BACKEND
 from src.eyes.eyes import Eyes
-from src.eyes.eyestates import BlinkOnce
+from src.eyes.eyestates import BlinkOnce, ClockMode
 from src.main import start_main_loop
 
 
@@ -60,8 +60,18 @@ def bootstrap():
                         log_error(ex)
 
 
+def start_clock():
+    with Eyes() as eyes:
+        eyes.set_state(ClockMode())
+        input("enter to exit")
+
+
 if __name__ == "__main__":
     try:
-        bootstrap()
+        mode = settings.get_mode()
+        if mode == "Assistant":
+            bootstrap()
+        elif mode == "Clock":
+            start_clock()
     except Exception as ex:
         log_error(ex)

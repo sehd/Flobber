@@ -1,5 +1,7 @@
 import os
 
+def get_mode():
+    return os.environ.get("FLOBBER_MODE", "Assistant")
 
 def get_mic_device_id():
     return int(os.environ.get("FLOBBER_MIC_ID", "0"))
