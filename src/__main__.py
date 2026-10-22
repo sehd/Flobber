@@ -7,7 +7,7 @@ from playsound3 import playsound, AVAILABLE_BACKENDS, DEFAULT_BACKEND
 from src.eyes.eyes import Eyes
 from src.eyes.eyestates import BlinkOnce, ClockMode
 from src.main import start_main_loop
-
+import threading
 
 def test_mic(recorder):
     recorder.start_recorder()
@@ -63,7 +63,8 @@ def bootstrap():
 def start_clock():
     with Eyes() as eyes:
         eyes.set_state(ClockMode())
-        input("enter to exit")
+        print("Ctrl + C to exit")
+        threading.Event().wait()
 
 
 if __name__ == "__main__":
