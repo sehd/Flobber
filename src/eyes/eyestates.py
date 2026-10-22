@@ -130,9 +130,9 @@ class ClockMode(Animation):
         self.rim_inner = 3
 
         self.hour_hand_coordinates = []
-        for h in range(12):
-            s = sin(pi * h / 6)
-            c = cos(pi * h / 6)
+        for h in range(720):
+            s = sin(pi * h / 360)
+            c = cos(pi * h / 360)
             c1 = (center[0] - l_h * s, center[1] + l_h * c)
             c2 = (center[0] - w_h * c, center[1] - w_h * s)
             c3 = (center[0] + w_h * c, center[1] + w_h * s)
@@ -164,7 +164,7 @@ class ClockMode(Animation):
         clock = self.clockFace.copy()
         draw = ImageDraw.Draw(clock)
         draw.polygon(
-            self.hour_hand_coordinates[h],
+            self.hour_hand_coordinates[h * 60 + m],
             fill=self.color_inner,
             outline=self.color_outer,
             width=2,
