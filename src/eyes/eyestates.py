@@ -133,18 +133,18 @@ class ClockMode(Animation):
         for h in range(12):
             s = sin(pi * h / 6)
             c = cos(pi * h / 6)
-            c1 = (center[0] + l_h * s, center[1] - l_h * c)
-            c2 = (center[0] + w_h * c, center[1] + w_h * s)
-            c3 = (center[0] - w_h * c, center[1] - w_h * s)
+            c1 = (center[0] - l_h * s, center[1] + l_h * c)
+            c2 = (center[0] - w_h * c, center[1] - w_h * s)
+            c3 = (center[0] + w_h * c, center[1] + w_h * s)
             self.hour_hand_coordinates.append([c1, c2, c3])
 
         self.minute_hand_coordinates = []
         for m in range(60):
             s = sin(pi * m / 30)
             c = cos(pi * m / 30)
-            c1 = (center[0] + l_m * s, center[1] - l_m * c)
-            c2 = (center[0] + w_m * c, center[1] + w_m * s)
-            c3 = (center[0] - w_m * c, center[1] - w_m * s)
+            c1 = (center[0] - l_m * s, center[1] + l_m * c)
+            c2 = (center[0] - w_m * c, center[1] - w_m * s)
+            c3 = (center[0] + w_m * c, center[1] + w_m * s)
             self.minute_hand_coordinates.append([c1, c2, c3])
 
         self.outer_circle = [

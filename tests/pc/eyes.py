@@ -37,8 +37,8 @@ class Eyes:
             self.timer.start()
 
     def set_image(self, image):
-        image[0].show()
-        image[1].show()
+        image[0].rotate(180).show()
+        image[1].rotate(180).show()
 
 
 if __name__ == "__main__":
