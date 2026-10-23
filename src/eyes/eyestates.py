@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from PIL import Image, ImageDraw
 from datetime import datetime
 from math import cos, sin, pi
+from random import random
 
 
 class Animation(ABC):
@@ -111,7 +112,7 @@ class BlinkOnce(Animation):
 
 
 class ClockMode(Animation):
-    color_outer = "#D35400"
+    color_outer = "#F16B2D"
     color_inner = "#FF8A00"
 
     def init(self, displays):
@@ -182,4 +183,12 @@ class ClockMode(Animation):
             width=self.rim_inner,
         )
 
-        return self.prepare_image(clock, self.blankImage)
+        if random() > 0.5:
+            return self.prepare_image(
+                clock.rotate(10.4, resample=Image.Resampling.BICUBIC, expand=False),
+                self.blankImage,
+            )
+        return self.prepare_image(
+            self.blankImage,
+            clock.rotate(-10.4, resample=Image.Resampling.BICUBIC, expand=False),
+        )
