@@ -123,30 +123,53 @@ class ClockMode(Animation):
         center = (120, 120)
         l_h = 60
         w_h = 6
+        l_mid_h = 50
+        fatness_h = 0.096
 
         l_m = 85
         w_m = 5
+        l_mid_m = 80
+        fatness_m = 0.032
 
         rim_outer = 7
         self.rim_inner = 3
 
         self.hour_hand_coordinates = []
         for h in range(720):
-            s = sin(pi * h / 360)
-            c = cos(pi * h / 360)
+            theta = pi * h / 360
+            s = sin(theta)
+            c = cos(theta)
             c1 = (center[0] - l_h * s, center[1] + l_h * c)
             c2 = (center[0] - w_h * c, center[1] - w_h * s)
             c3 = (center[0] + w_h * c, center[1] + w_h * s)
-            self.hour_hand_coordinates.append([c1, c2, c3])
+            cmid1 = (
+                center[0] - l_mid_h * cos(pi / 2 - theta - fatness_h),
+                center[1] + l_mid_h * sin(pi / 2 - theta - fatness_h),
+            )
+            cmid2 = (
+                center[0] - l_mid_h * cos(pi / 2 - theta + fatness_h),
+                center[1] + l_mid_h * sin(pi / 2 - theta + fatness_h),
+            )
+
+            self.hour_hand_coordinates.append([c1, cmid1, c2, c3, cmid2])
 
         self.minute_hand_coordinates = []
         for m in range(60):
-            s = sin(pi * m / 30)
-            c = cos(pi * m / 30)
+            theta = pi * m / 30
+            s = sin(theta)
+            c = cos(theta)
             c1 = (center[0] - l_m * s, center[1] + l_m * c)
             c2 = (center[0] - w_m * c, center[1] - w_m * s)
             c3 = (center[0] + w_m * c, center[1] + w_m * s)
-            self.minute_hand_coordinates.append([c1, c2, c3])
+            cmid1 = (
+                center[0] - l_mid_m * cos(pi / 2 - theta - fatness_m),
+                center[1] + l_mid_m * sin(pi / 2 - theta - fatness_m),
+            )
+            cmid2 = (
+                center[0] - l_mid_m * cos(pi / 2 - theta + fatness_m),
+                center[1] + l_mid_m * sin(pi / 2 - theta + fatness_m),
+            )
+            self.minute_hand_coordinates.append([c1, cmid1, c2, c3, cmid2])
 
         self.outer_circle = [
             center[0] - rim_outer,
